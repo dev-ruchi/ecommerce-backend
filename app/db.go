@@ -67,21 +67,20 @@ func createProductTable() {
 }
 
 func createOrderTable() {
-    fmt.Println("SHOULD CREATE ORDER TABLE")
-    _, err := Db.Exec(`
+	fmt.Println("SHOULD CREATE ORDER TABLE")
+	_, err := Db.Exec(`
         CREATE TABLE IF NOT EXISTS orders (
-            order_id SERIAL PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             user_id INT,
             product_id INT,
             quantity INT,
             total_price DECIMAL(10, 2),
-            FOREIGN KEY (product_id) REFERENCES products(id)
-          
-            -- FOREIGN KEY (user_id) REFERENCES users(id)
+            FOREIGN KEY (product_id) REFERENCES products(id),         
+            FOREIGN KEY (user_id) REFERENCES users(id)
         )
     `)
 
-    if err != nil {
-        fmt.Println(err)
-    }
+	if err != nil {
+		fmt.Println(err)
+	}
 }
