@@ -32,6 +32,7 @@ func SetupDatabase() {
 	createUsersTable()
 	createProductTable()
 	createOrderTable()
+	createAddressTable()
 }
 
 func createUsersTable() {
@@ -77,6 +78,23 @@ func createOrderTable() {
             total_price DECIMAL(10, 2),
             FOREIGN KEY (product_id) REFERENCES products(id),         
             FOREIGN KEY (user_id) REFERENCES users(id)
+        )
+    `)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
+func createAddressTable() {
+	fmt.Println("SHOULD CREATE ADDRESS TABLE")
+	_, err := Db.Exec(`
+        CREATE TABLE IF NOT EXISTS address (
+            id SERIAL PRIMARY KEY,
+            street VARCHAR(255) NOT NULL,
+            city VARCHAR(100) NOT NULL,
+            state VARCHAR(100) NOT NULL,
+            pin_code VARCHAR(20) NOT NULL
         )
     `)
 

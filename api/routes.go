@@ -34,6 +34,7 @@ func SetupRoutes() {
 	router.PUT("/products", handlers.HandleUpdateProducts)
 	router.DELETE("/products/:id", handlers.HandleDeleteProducts)
 	router.POST("/orders", handlers.HandleOrders)
+	router.POST("/address", handlers.HandleAddress)
 
 	router.Run()
 }
