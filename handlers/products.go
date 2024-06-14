@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
+	"net/http"
 
 	"e-store-backend/app"
 	"e-store-backend/models"
@@ -110,3 +112,35 @@ func HandleDeleteProducts(context *gin.Context) {
 
 	context.Status(204)
 }
+
+func HandleFetchProduct(context *gin.Context) {
+    // Get the product ID from the URL parameters
+    productID := context.Param("id")
+
+    // Prepare the SQL query
+    query := "SELECT id, title, price, description, rating FROM products WHERE id = $1"
+
+    // Query the database for the product
+    var product models.Product
+	
+    err := app.Db.QueryRow(query, productID).Scan(&product.Id, &product.Title, &product.Price, &product.Description, &product.Rating)
+    if err != nil {
+        if err == sql.ErrNoRows {
+            // If no product is found, return a 404 Not Found response
+            context.JSON(http.StatusNotFound, gin.H{
+                "message": "Product not found",
+            })
+        } else {
+            // Log the error and return a 500 Internal Server Error response
+            log.Println("Error fetching product:", err)
+            context.JSON(http.StatusInternalServerError, gin.H{
+                "message": "Failed to fetch product",
+            })
+        }
+        return
+    }
+
+    // Return the product as JSON
+    context.JSON(http.StatusOK, product)
+}
+

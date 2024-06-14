@@ -29,12 +29,17 @@ func SetupRoutes() {
 
 	router.POST("/login", handlers.HandleLogin)
 	router.POST("/users", handlers.HandleAddUsers)
+
 	router.GET("/products", handlers.HandleFetchProducts)
+	router.GET("/products/:id", handlers.HandleFetchProduct)
 	router.POST("/products", handlers.HandleAddProducts)
 	router.PUT("/products", handlers.HandleUpdateProducts)
 	router.DELETE("/products/:id", handlers.HandleDeleteProducts)
+
 	router.POST("/orders", handlers.HandleOrders)
-	router.POST("/address", handlers.HandleAddress)
+
+	router.POST("/address", handlers.HandleAddAddress)
+	router.GET("/addresses/:user_id", handlers.HandleFetchAddresses)
 
 	router.Run()
 }
