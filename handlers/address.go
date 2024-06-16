@@ -24,7 +24,7 @@ func HandleAddAddress(context *gin.Context) {
 	}
 
 	query := `
-        INSERT INTO address (user_id, street, city, state, pin_code)
+        INSERT INTO addresses (user_id, street, city, state, pin_code)
         VALUES ($1, $2, $3, $4, $5)
         RETURNING id`
 
@@ -44,7 +44,7 @@ func HandleAddAddress(context *gin.Context) {
 }
 
 func HandleFetchAddresses(context *gin.Context) {
-	rows, err := app.Db.Query("SELECT id, user_id, street, city, state, pin_code FROM address WHERE user_id=$1", context.Param("user_id"))
+	rows, err := app.Db.Query("SELECT id, user_id, street, city, state, pin_code FROM addresses WHERE user_id=$1", context.Param("user_id"))
 
 	if err != nil {
 

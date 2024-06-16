@@ -89,7 +89,7 @@ func createOrderTable() {
 func createAddressTable() {
 	fmt.Println("SHOULD CREATE ADDRESS TABLE")
 	_, err := Db.Exec(`
-        CREATE TABLE IF NOT EXISTS address (
+        CREATE TABLE IF NOT EXISTS addresses (
             id SERIAL PRIMARY KEY,
 			user_id INT,
 			street VARCHAR(255) NOT NULL,
