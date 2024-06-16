@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"log"
 
 	"e-store-backend/app"
 	"e-store-backend/models"
@@ -40,4 +41,42 @@ func HandleOrders(context *gin.Context) {
 	}
 
 	context.JSON(201, order)
+}
+
+func HandlePlaceOrders(context *gin.Context) {
+	rows, err := app.Db.Query(`SELECT id, user_id, product_id, quantity, total_price FROM orders WHERE user_id=$1`, context.Param("user_id"))
+
+	if err != nil {
+		log.Fatal(err)
+		context.JSON(500, gin.H{
+			"message": "Something went wrong",
+		})
+		return
+	}
+
+	defer rows.Close()
+
+	var orders []models.Order
+
+	for rows.Next() {
+		var order models.Order
+		if err := rows.Scan(&order.Id, &order.UserId, &order.ProductId, &order.Quantity, &order.TotalPrice); err != nil {
+			log.Fatal(err)
+			context.JSON(500, gin.H{
+				"message": "Something went wrong",
+			})
+			return
+		}
+		orders = append(orders, order)
+	}
+
+	if err = rows.Err(); err != nil {
+		log.Fatal(err)
+		context.JSON(500, gin.H{
+			"message": "Something went wrong",
+		})
+		return
+	}
+
+	context.JSON(200, orders)
 }
