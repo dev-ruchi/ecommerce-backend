@@ -25,6 +25,8 @@ func corsMiddleware() gin.HandlerFunc {
 func SetupRoutes() {
 	router := gin.Default()
 
+	router.MaxMultipartMemory = 8 << 20 // 8 MiB
+
 	router.Use(corsMiddleware())
 
 	router.POST("/login", handlers.HandleLogin)
@@ -41,6 +43,8 @@ func SetupRoutes() {
 
 	router.POST("/address", handlers.HandleAddAddress)
 	router.GET("/addresses/:user_id", handlers.HandleFetchAddresses)
+
+	router.POST("/files/upload", handlers.HandleFilesUpload)
 
 	router.Run()
 }

@@ -58,7 +58,8 @@ func createProductTable() {
             title TEXT,
             price DECIMAL(10, 2),
             description TEXT,
-            rating DECIMAL(3, 2)	
+            rating DECIMAL(3, 2),
+			images TEXT[]
 		)
     `)
 

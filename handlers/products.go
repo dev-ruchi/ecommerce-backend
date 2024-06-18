@@ -26,11 +26,11 @@ func HandleAddProducts(context *gin.Context) {
 	}
 
 	query := `
-        INSERT INTO products (title, price, description, rating)
-        VALUES ($1, $2, $3, $4)
+        INSERT INTO products (title, price, description, rating, image)
+        VALUES ($1, $2, $3, $4, $5)
         RETURNING id`
 
-	err = app.Db.QueryRow(query, product.Title, product.Price, product.Description, product.Rating).Scan(
+	err = app.Db.QueryRow(query, product.Title, product.Price, product.Description, product.Rating, product.Image).Scan(
 		&product.Id,
 	)
 
