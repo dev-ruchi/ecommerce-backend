@@ -26,11 +26,11 @@ func HandleAddProducts(context *gin.Context) {
 	}
 
 	query := `
-        INSERT INTO products (title, price, description, rating, image)
+        INSERT INTO products (title, price, description, rating, images)
         VALUES ($1, $2, $3, $4, $5)
         RETURNING id`
 
-	err = app.Db.QueryRow(query, product.Title, product.Price, product.Description, product.Rating, product.Image).Scan(
+	err = app.Db.QueryRow(query, product.Title, product.Price, product.Description, product.Rating, product.Images).Scan(
 		&product.Id,
 	)
 
@@ -114,33 +114,32 @@ func HandleDeleteProducts(context *gin.Context) {
 }
 
 func HandleFetchProduct(context *gin.Context) {
-    // Get the product ID from the URL parameters
-    productID := context.Param("id")
+	// Get the product ID from the URL parameters
+	productID := context.Param("id")
 
-    // Prepare the SQL query
-    query := "SELECT id, title, price, description, rating FROM products WHERE id = $1"
+	// Prepare the SQL query
+	query := "SELECT id, title, price, description, rating FROM products WHERE id = $1"
 
-    // Query the database for the product
-    var product models.Product
-	
-    err := app.Db.QueryRow(query, productID).Scan(&product.Id, &product.Title, &product.Price, &product.Description, &product.Rating)
-    if err != nil {
-        if err == sql.ErrNoRows {
-            // If no product is found, return a 404 Not Found response
-            context.JSON(http.StatusNotFound, gin.H{
-                "message": "Product not found",
-            })
-        } else {
-            // Log the error and return a 500 Internal Server Error response
-            log.Println("Error fetching product:", err)
-            context.JSON(http.StatusInternalServerError, gin.H{
-                "message": "Failed to fetch product",
-            })
-        }
-        return
-    }
+	// Query the database for the product
+	var product models.Product
 
-    // Return the product as JSON
-    context.JSON(http.StatusOK, product)
+	err := app.Db.QueryRow(query, productID).Scan(&product.Id, &product.Title, &product.Price, &product.Description, &product.Rating)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			// If no product is found, return a 404 Not Found response
+			context.JSON(http.StatusNotFound, gin.H{
+				"message": "Product not found",
+			})
+		} else {
+			// Log the error and return a 500 Internal Server Error response
+			log.Println("Error fetching product:", err)
+			context.JSON(http.StatusInternalServerError, gin.H{
+				"message": "Failed to fetch product",
+			})
+		}
+		return
+	}
+
+	// Return the product as JSON
+	context.JSON(http.StatusOK, product)
 }
-
