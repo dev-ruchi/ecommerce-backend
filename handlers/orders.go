@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func HandleOrders(context *gin.Context) {
+func HandleAddOrders(context *gin.Context) {
 	var order models.Order
 
 	err := context.BindJSON(&order)
@@ -24,11 +24,11 @@ func HandleOrders(context *gin.Context) {
 	}
 
 	query := `
-        INSERT INTO orders (user_id, product_id, quantity, total_price)
-        VALUES ($1, $2, $3, $4)
+        INSERT INTO orders (user_id, product_id, quantity, total_price, status)
+        VALUES ($1, $2, $3, $4, $5)
         RETURNING id`
 
-	err = app.Db.QueryRow(query, order.UserId, order.ProductId, order.Quantity, order.TotalPrice).Scan(
+	err = app.Db.QueryRow(query, order.UserId, order.ProductId, order.Quantity, order.TotalPrice, order.Status).Scan(
 		&order.Id,
 	)
 
@@ -43,8 +43,8 @@ func HandleOrders(context *gin.Context) {
 	context.JSON(201, order)
 }
 
-func HandlePlaceOrders(context *gin.Context) {
-	rows, err := app.Db.Query(`SELECT id, user_id, product_id, quantity, total_price FROM orders WHERE user_id=$1`, context.Param("user_id"))
+func HandleFetchOrders(context *gin.Context) {
+	rows, err := app.Db.Query(`SELECT id, user_id, product_id, quantity, total_price, status FROM orders WHERE user_id=$1`, context.Param("user_id"))
 
 	if err != nil {
 		log.Fatal(err)
@@ -60,7 +60,7 @@ func HandlePlaceOrders(context *gin.Context) {
 
 	for rows.Next() {
 		var order models.Order
-		if err := rows.Scan(&order.Id, &order.UserId, &order.ProductId, &order.Quantity, &order.TotalPrice); err != nil {
+		if err := rows.Scan(&order.Id, &order.UserId, &order.ProductId, &order.Quantity, &order.TotalPrice, &order.Status); err != nil {
 			log.Fatal(err)
 			context.JSON(500, gin.H{
 				"message": "Something went wrong",

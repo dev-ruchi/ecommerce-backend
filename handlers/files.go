@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"mime/multipart"
 	"net/http"
 	"strings"
@@ -37,9 +36,6 @@ func HandleFilesUpload(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save file"})
 			return
 		}
-
-		// Process the uploaded file as needed
-		fmt.Printf("Original File Name: %s, File saved: %s\n", originalFileName, originalFileName)
 	}
 
 	// Send a response

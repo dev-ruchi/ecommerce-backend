@@ -38,13 +38,14 @@ func SetupRoutes() {
 	router.PUT("/products", handlers.HandleUpdateProducts)
 	router.DELETE("/products/:id", handlers.HandleDeleteProducts)
 
-	router.POST("/orders", handlers.HandleOrders)
-	router.GET("/orders/:user_id", handlers.HandlePlaceOrders)
+	router.POST("/orders", handlers.HandleAddOrders)
+	router.GET("/orders/:user_id", handlers.HandleFetchOrders)
 
 	router.POST("/address", handlers.HandleAddAddress)
 	router.GET("/addresses/:user_id", handlers.HandleFetchAddresses)
 
 	router.POST("/files/upload", handlers.HandleFilesUpload)
+	router.GET("/files/:fileName", handlers.HandleFetchFile)
 
 	router.Run()
 }

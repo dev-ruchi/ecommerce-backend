@@ -65,13 +65,13 @@ func HandleFetchProducts(context *gin.Context) {
 
 		var product models.Product
 
-		if err := rows.Scan(&product.Id, &product.Title, &product.Price, &product.Description, &product.Rating); err != nil {
+		if err := rows.Scan(&product.Id, &product.Title, &product.Price, &product.Description, &product.Rating, &product.Images); err != nil {
 
 			log.Fatal(err)
 
 			context.JSON(500, gin.H{
 				"message": "Something went wrong",
-			})
+			})	
 		}
 
 		products = append(products, product)
