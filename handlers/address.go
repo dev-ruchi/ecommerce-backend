@@ -84,5 +84,10 @@ func HandleFetchAddresses(context *gin.Context) {
 		})
 	}
 
+	if (addresses == nil) {
+		context.JSON(200, []models.Address{})
+		return
+	}
+
 	context.JSON(200, addresses)
 }

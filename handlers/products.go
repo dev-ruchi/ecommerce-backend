@@ -86,6 +86,11 @@ func HandleFetchProducts(context *gin.Context) {
 		})
 	}
 
+	if (products == nil) {
+		context.JSON(200, []models.Product{})
+		return
+	}
+
 	context.JSON(200, products)
 }
 

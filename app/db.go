@@ -39,8 +39,10 @@ func createUsersTable() {
 	_, err := Db.Exec(`
 		CREATE TABLE IF NOT EXISTS users (
 			id SERIAL PRIMARY KEY,
-			username TEXT,
-			email TEXT,
+			first_name TEXT,
+			last_name TEXT,
+			phone TEXT,
+	        email TEXT,
 			password TEXT
 		)
 	`)
@@ -72,6 +74,7 @@ func createOrderTable() {
 	_, err := Db.Exec(`
         CREATE TABLE IF NOT EXISTS orders (
             id SERIAL PRIMARY KEY,
+            txn_id SERIAL,
             user_id INT,
             product_id INT,
             quantity INT,

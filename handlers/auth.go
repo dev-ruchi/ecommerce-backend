@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/gin-gonic/gin"
-	"e-store-backend/models"
 	"e-store-backend/app"
+	"e-store-backend/models"
+	"github.com/gin-gonic/gin"
 )
 
 type LoginRequest struct {
@@ -30,7 +30,7 @@ func HandleLogin(context *gin.Context) {
 	var user models.User
 
 	query := `
-        SELECT id, username, email, password
+        SELECT id, first_name, last_name, phone, email, password
         FROM users
         WHERE email = $1`
 
@@ -46,7 +46,9 @@ func HandleLogin(context *gin.Context) {
 
 	row.Scan(
 		&user.Id,
-		&user.Username,
+		&user.FirstName,
+		&user.LastName,
+		&user.Phone,
 		&user.Email,
 		&user.Password,
 	)
@@ -62,9 +64,10 @@ func HandleLogin(context *gin.Context) {
 	context.JSON(http.StatusOK, gin.H{
 		"message": "Login successful",
 		"user": gin.H{
-			"id":       user.Id,
-			"username": user.Username,
-			"email":    user.Email,
+			"id":         user.Id,
+			"first_name": user.FirstName,
+			"last_name":  user.LastName,
+			"email":      user.Email,
 		},
 	})
 }
@@ -83,11 +86,11 @@ func HandleAddUsers(context *gin.Context) {
 	}
 
 	query := `
-        INSERT INTO users (username, email, password)
-        VALUES ($1, $2, $3)
+        INSERT INTO users (first_name, last_name, phone, email, password)
+        VALUES ($1, $2, $3, $4, $5)
         RETURNING id`
 
-	err = app.Db.QueryRow(query, user.Username, user.Email, user.Password).Scan(
+	err = app.Db.QueryRow(query, user.FirstName, user.LastName, user.Phone, user.Email, user.Password).Scan(
 		&user.Id,
 	)
 

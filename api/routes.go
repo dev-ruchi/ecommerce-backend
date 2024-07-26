@@ -47,5 +47,7 @@ func SetupRoutes() {
 	router.POST("/files/upload", handlers.HandleFilesUpload)
 	router.GET("/files/:fileName", handlers.HandleFetchFile)
 
+	router.GET("/payment/:order_id", handlers.HandlePayment)
+
 	router.Run()
 }
