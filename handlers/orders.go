@@ -44,7 +44,8 @@ func HandleAddOrders(context *gin.Context) {
 }
 
 func HandleFetchOrders(context *gin.Context) {
-	rows, err := app.Db.Query(`SELECT id, user_id, product_id, quantity, total_price, status FROM orders WHERE user_id=$1`, context.Param("user_id"))
+	userId := uint(context.GetFloat64("userId"))
+	rows, err := app.Db.Query(`SELECT id, user_id, product_id, quantity, total_price, status FROM orders WHERE user_id=$1`, userId)
 
 	if err != nil {
 		log.Fatal(err)

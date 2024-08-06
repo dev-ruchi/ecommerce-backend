@@ -44,7 +44,8 @@ func HandleAddAddress(context *gin.Context) {
 }
 
 func HandleFetchAddresses(context *gin.Context) {
-	rows, err := app.Db.Query("SELECT id, user_id, street, city, state, pin_code FROM addresses WHERE user_id=$1", context.Param("user_id"))
+	userId := uint(context.GetFloat64("userId"))
+	rows, err := app.Db.Query("SELECT id, user_id, street, city, state, pin_code FROM addresses WHERE user_id=$1", userId)
 
 	if err != nil {
 
@@ -84,7 +85,7 @@ func HandleFetchAddresses(context *gin.Context) {
 		})
 	}
 
-	if (addresses == nil) {
+	if addresses == nil {
 		context.JSON(200, []models.Address{})
 		return
 	}
