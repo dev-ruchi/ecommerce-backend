@@ -13,6 +13,8 @@ import (
 func HandleAddAddress(context *gin.Context) {
 	var address models.Address
 
+	address.UserId =  int(context.GetFloat64("userId"))
+
 	err := context.BindJSON(&address)
 
 	if err != nil {

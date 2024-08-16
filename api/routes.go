@@ -2,6 +2,7 @@ package api
 
 import (
 	"e-store-backend/handlers"
+	"fmt"
 	"net/http"
 	"os"
 
@@ -37,7 +38,7 @@ func SetupRoutes() {
 	guardedRoutes.POST("/files/upload", handlers.HandleFilesUpload)
 	guardedRoutes.GET("/files/:fileName", handlers.HandleFetchFile)
 
-	guardedRoutes.GET("/payment/:order_id", handlers.HandlePayment)
+	router.GET("/payment/:order_id", handlers.HandlePayment)
 
 	router.Run()
 }
@@ -50,6 +51,7 @@ func authMiddleware(c *gin.Context) {
 	if tokenString == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		c.Abort()
+		fmt.Println("Token not found");
 		return
 	}
 
@@ -62,8 +64,9 @@ func authMiddleware(c *gin.Context) {
 
 	// Check for parsing errors
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized2"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		c.Abort()
+		fmt.Println("Unable to parse token string");
 		return
 	}
 
@@ -72,8 +75,9 @@ func authMiddleware(c *gin.Context) {
 		// Extract userId from the token claims
 		userId, ok := claims["userId"]
 		if !ok {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid userId in token"})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 			c.Abort()
+			fmt.Println("Invalid token");
 			return
 		}
 

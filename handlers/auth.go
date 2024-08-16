@@ -57,10 +57,10 @@ func HandleLogin(context *gin.Context) {
 		&user.Password,
 	)
 
-	if loginRequest.Password != user.Password {
-		context.JSON(http.StatusUnprocessableEntity, gin.H{
-			"message": "Invalid email and password combination",
-		})
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginRequest.Password))
+
+	if err != nil {
+		context.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
 		return
 	}
 

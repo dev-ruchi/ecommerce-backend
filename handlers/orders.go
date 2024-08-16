@@ -12,7 +12,7 @@ import (
 
 func HandleAddOrders(context *gin.Context) {
 	var order models.Order
-
+	order.UserId = int(context.GetFloat64("userId"))
 	err := context.BindJSON(&order)
 
 	if err != nil {
