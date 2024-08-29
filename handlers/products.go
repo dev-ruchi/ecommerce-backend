@@ -123,12 +123,12 @@ func HandleFetchProduct(context *gin.Context) {
 	productID := context.Param("id")
 
 	// Prepare the SQL query
-	query := "SELECT id, title, price, description, rating FROM products WHERE id = $1"
+	query := "SELECT id, title, price, description, rating, images FROM products WHERE id = $1"
 
 	// Query the database for the product
 	var product models.Product
 
-	err := app.Db.QueryRow(query, productID).Scan(&product.Id, &product.Title, &product.Price, &product.Description, &product.Rating)
+	err := app.Db.QueryRow(query, productID).Scan(&product.Id, &product.Title, &product.Price, &product.Description, &product.Rating, &product.Images)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			// If no product is found, return a 404 Not Found response
