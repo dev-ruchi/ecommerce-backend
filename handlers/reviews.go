@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"log"
 
 	"e-store-backend/app"
 	"e-store-backend/models"
@@ -40,4 +41,53 @@ func HandleAddReviews(context *gin.Context) {
 	}
 
 	context.JSON(201, review)
+}
+
+func HandleFetchReviews(context *gin.Context) {
+	rows, err := app.Db.Query("SELECT * FROM reviews")
+
+	if err != nil {
+
+		log.Fatal(err)
+
+		context.JSON(500, gin.H{
+			"message": "Something went wrong",
+		})
+	}
+
+	defer rows.Close()
+
+	var reviews []models.Review
+
+	for rows.Next() {
+
+		var review models.Review
+
+		if err := rows.Scan(&review.Id, &review.Rating, &review.Comment); err != nil {
+
+			log.Fatal(err)
+
+			context.JSON(500, gin.H{
+				"message": "Something went wrong",
+			})
+		}
+
+		reviews = append(reviews, review)
+	}
+
+	if err = rows.Err(); err != nil {
+
+		log.Fatal(err)
+
+		context.JSON(500, gin.H{
+			"message": "Something went wrong",
+		})
+	}
+
+	if reviews == nil {
+		context.JSON(200, []models.Review{})
+		return
+	}
+
+	context.JSON(200, reviews)
 }

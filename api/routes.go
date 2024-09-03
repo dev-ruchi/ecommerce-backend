@@ -41,6 +41,7 @@ func SetupRoutes() {
 	router.GET("/payment/:order_id", handlers.HandlePayment)
 
 	router.POST("/reviews", handlers.HandleAddReviews)
+	router.GET("/reviews", handlers.HandleFetchReviews)
 
 	router.Run()
 }
