@@ -33,6 +33,7 @@ func SetupDatabase() {
 	createProductTable()
 	createOrderTable()
 	createAddressTable()
+	createReviewTable()
 }
 
 func createUsersTable() {
@@ -101,6 +102,20 @@ func createAddressTable() {
             state VARCHAR(100) NOT NULL,
             pin_code VARCHAR(20) NOT NULL,
 			FOREIGN KEY (user_id) REFERENCES users(id)
+        )
+    `)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
+func createReviewTable() {
+	_, err := Db.Exec(`
+        CREATE TABLE IF NOT EXISTS reviews (
+            id SERIAL PRIMARY KEY,
+             rating DECIMAL(3, 2),
+			 comment TEXT
         )
     `)
 

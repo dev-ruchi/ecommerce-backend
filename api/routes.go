@@ -40,6 +40,8 @@ func SetupRoutes() {
 
 	router.GET("/payment/:order_id", handlers.HandlePayment)
 
+	router.POST("/reviews", handlers.HandleAddReviews)
+
 	router.Run()
 }
 
@@ -51,7 +53,7 @@ func authMiddleware(c *gin.Context) {
 	if tokenString == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		c.Abort()
-		fmt.Println("Token not found");
+		fmt.Println("Token not found")
 		return
 	}
 
@@ -66,7 +68,7 @@ func authMiddleware(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		c.Abort()
-		fmt.Println("Unable to parse token string");
+		fmt.Println("Unable to parse token string")
 		return
 	}
 
@@ -77,7 +79,7 @@ func authMiddleware(c *gin.Context) {
 		if !ok {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 			c.Abort()
-			fmt.Println("Invalid token");
+			fmt.Println("Invalid token")
 			return
 		}
 
@@ -107,5 +109,3 @@ func corsMiddleware() gin.HandlerFunc {
 		c.Next()
 	}
 }
-
-
